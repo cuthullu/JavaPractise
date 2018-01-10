@@ -2,10 +2,9 @@
 
 ## Spring core
 
-Spring framework v5.0 compatible with JDK 8+ and JDK 9.
-Spring core contains a configuration model and dependency injection mechanism.
-It came about in 2003.
-Integrates with Java EE platform specifications:
+Spring framework at it's core contains a configuration model, dependency injection mechanism and a container to run the application in. It came about in 2003 and as of v5.0 is compatible with JDK 8+ and JDK 9.
+
+It has been developed to integrate with Java EE platform specifications, rather than wholly replace them. Current specifications include:
   - Servlet API
   - Websocket API
   - Concurrency Utilities
