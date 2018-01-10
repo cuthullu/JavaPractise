@@ -1,15 +1,14 @@
 package demo;
 
-import demo.spring.javaconfig.AppConfig;
-import demo.spring.javaconfig.TodoDao;
-import demo.spring.javaconfig.TodoServiceImpl;
+import demo.spring.annotations.TodoDao;
+import demo.spring.annotations.TodoServiceImpl;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class SpringJavaRunner {
+public class SpringAnnotationsRunner {
 
     public static void main(String[] args) {
-        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+        ApplicationContext context = new ClassPathXmlApplicationContext("annotations.xml");
 
         TodoServiceImpl service = context.getBean("todoService", TodoServiceImpl.class);
         System.out.println(service.getImportantServiceProperty());

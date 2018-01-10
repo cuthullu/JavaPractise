@@ -15,7 +15,7 @@ Integrates with Java EE platform specifications:
   - JMS (Java Message Service)
   - JTA/JCA setups for transaction coordination, if necessary
 
-As well as supporting Java EE Dependency Inject and Common Annotations specifications.
+As well as supporting Java EE Dependency Injection and Common Annotations specifications.
 
 Spring's core functionality is to take POJOs and configuration metadata, and assemble them into fully configured beans. 
 Done with the `org.springframework.context.ApplicationContext` interface, the spring IoC (inversion of control) container.
@@ -31,6 +31,23 @@ Spring provides several ways to declare configuration metadata.
 
 ### XML
 
+Write XML files pointing to classes and declaring properties.
+Use `ClassPathXmlApplicationContext` or `FilSystemXmlApplicationContext`.
+
+*see\: `SpringXMLRunner.Java`*
+
+### Annotations
+
+Use annotations on POJOs (no longer POJOs) and use `context:component-scan` in your configuration to find them and construct the Application Context.
+
+*see\: `SpringJavaRunner.Java`*
+
+
+### Java-based
+
+Create a configuration class(es), define beans and properties in there using annotations Use `AnnotationConfigApplicationContext` (takes any `@Component` or JSR-330 annotated class in constructor) to construct the Application Context
+
+*see\: `SpringAnnotationsRunner.Java`*
 
 
 ## Autowiring

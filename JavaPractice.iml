@@ -7,6 +7,9 @@
           <file>file://$MODULE_DIR$/src/main/resources/services.xml</file>
           <file>file://$MODULE_DIR$/src/main/resources/daos.xml</file>
         </fileset>
+        <fileset id="fileset2" name="Annotations" removed="false">
+          <file>file://$MODULE_DIR$/src/main/resources/annotations.xml</file>
+        </fileset>
       </configuration>
     </facet>
   </component>
