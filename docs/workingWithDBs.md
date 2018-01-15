@@ -57,7 +57,7 @@ Pros:
   - makes code easier to reason with (all information is together)
   - Can be written to Java EE annotation specifications (swap out your DI framework)
   - more succinct than XML
-  
+
 Cons:
   - code is tied to it's configuration once compiled
   - code is tied to it's Spring/other framework once compiled
@@ -88,7 +88,55 @@ Each configuration method has it's pros and cons, and may be better suited for c
 
 ## Autowiring
 
+Autowiring searches a given path and attempts to *figure out* dependencies for you. Obviously the benefits of this is that it removes a lot of manual configuration and wiring up. The obvious down sides are that may not be exact, and to outside eyes, it will look like your code is held together by wishful thoughts and magic.
+
+It is used by declaring your classes with one of the component annotations (`@Component, @Repository, @Service, @Controller`) and then using the `@Autowire` annotation where the instance of the component is to be used. Be it on properties, setters, or constructors, 
+
+```
+@Component
+public class MyComponent {
+    ...
+}
+
+public class ComponentUser {
+
+  @Autowire
+  private MyComponent myComponent;
+
+}
+```
+
+If spring finds an ambiguous reference, it will throw a `NoUniqueBeanDefinitionException`. You can be more specific with autowiring by using `@Primary` to set one bean to be pick over others. Or you can use `@Qualifier` to specify a bean name. 
+
+
 ## JDBC & Driver
+
+### JDBC
+
+JDBC is an API for talking to SQL databases or tabular data sources  with Java. It broadly provides these functions:
+
+- Establishing a connection to a database or data source
+- Send SQL statements
+- Process the results
+
+Statements can created using the following three interfaces
+
+#### `Statement` - *For executing a static SQL statement and returning the result.*
+
+Statements are created through a `Connection` factory method, and provide three execution methods. 
+
+```
+Statement statement = conn.createStatement();
+boolean canRetrieve = conn.execute("SELECT * from Users");
+int rowsAffected = conn.executeUpdate("UPDATE Users set )
+ResultSet rs = statement.executeQuery("SELECT * from Users");
+```
+
+By default a statement can only have one open `ResultSet` at a time. Therefore, any execution methods on a statement will close any existing ResultSets. If multiple concurrent ResultSets are needed, then multiple statements should be instantiated. Statements do not support parameters.
+
+
+- `PreparedStatement` - the statement is cached, so it can be efficiently repeatably called.
+- `CallableStatement` - for executing a stored procedure or function on the database
 
 ## Spring JDBC
 
