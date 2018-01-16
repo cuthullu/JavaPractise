@@ -21,6 +21,8 @@ Done with the `org.springframework.context.ApplicationContext` interface, the sp
 
 ![Container Magic](container-magic.png)	
 
+---
+
 ## XML vs Java
 
 Spring provides several ways to declare configuration metadata.
@@ -88,7 +90,7 @@ Each configuration method has it's pros and cons, and may be better suited for c
 
 ## Autowiring
 
-Autowiring searches a given path and attempts to *figure out* dependencies for you. Obviously the benefits of this is that it removes a lot of manual configuration and wiring up. The obvious down sides are that may not be exact, and to outside eyes, it will look like your code is held together by wishful thoughts and magic.
+Autowiring searches a given path and attempts to *figure out* dependencies for you. The benefits of this is that it removes a lot of manual configuration and wiring up. The obvious down sides are that may not be exact, and to outside eyes, it will look like your code is held together by wishful thoughts and magic.
 
 It is used by declaring your classes with one of the component annotations (`@Component, @Repository, @Service, @Controller`) and then using the `@Autowire` annotation where the instance of the component is to be used. Be it on properties, setters, or constructors, 
 
@@ -121,7 +123,7 @@ JDBC is an API for talking to SQL databases or tabular data sources  with Java. 
 
 Statements can created using the following three interfaces
 
-#### `Statement` - *For executing a static SQL statement and returning the result.*
+#### `Statement` - *for executing a static SQL statement and returning the result.*
 
 Statements are created through a `Connection` factory method, and provide three execution methods. 
 
@@ -132,12 +134,44 @@ int rowsAffected = conn.executeUpdate("UPDATE Users set )
 ResultSet rs = statement.executeQuery("SELECT * from Users");
 ```
 
-By default a statement can only have one open `ResultSet` at a time. Therefore, any execution methods on a statement will close any existing ResultSets. If multiple concurrent ResultSets are needed, then multiple statements should be instantiated. Statements do not support parameters.
+By default a statement can only have one open `ResultSet` at a time. Therefore, any execution methods on a statement will close any existing open ResultSet. If multiple concurrent ResultSets are needed, then multiple statements should be instantiated. Statements do not support parameters.
 
 
-- `PreparedStatement` - the statement is cached, so it can be efficiently repeatably called.
-- `CallableStatement` - for executing a stored procedure or function on the database
+#### `PreparedStatement` - *the statement is cached, so it can be efficiently repeatably called.*
+
+PreparedStatements operate in much the same way as Statements, though they are cached and support parameters. 
+
+
+```
+PreparedStatement p = connection.prepareStatement("SELECT  * FROM user WHERE id > ?");
+
+p.setInt(1, 100);
+ResultSet rs = p.executeQuery();
+```
+
+#### `CallableStatement` - *for executing a stored procedure or function on the database*
+
+```
+String sql = "{call getUserEmail (?, ?)}";
+CallableStatement c = connection.prepareCall(sql);
+c.setInt(1, 104);
+c.executeQuery();
+String email = c.getString(2);
+```
 
 ## Spring JDBC
+
+| Action                                                   | Spring | You |
+|----------------------------------------------------------|--------|-----|
+| Define connection parameters.                            |        | x   |
+| Open the connection.                                     | x      |     |
+| Specify the SQL statement.                               |        | x   |
+| Declare parameters and provide parameter values          |        | x   |
+| Prepare and execute the statement.                       | x      |     |
+| Set up the loop to iterate through the results (if any). | x      |     |
+| Do the work for each iteration.                          |        | x   |
+| Process any exception.                                   | x      |     |
+| Handle transactions.                                     | x      |     |
+| Close the connection, statement and resultset.           | x      |     |
 
 ## JPA2

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--Register service bean -->
+    <bean id="transactionalService" name="transactionalService" class="demo.spring.dbs.TransactionalService"/>
+
+    <!-- Define transactional behaviours -->
+    <tx:advice id="txAdvice" transaction-manager="txManager">
+        <!-- the transactional semantics... -->
+        <tx:attributes>
+            <!-- all methods starting with 'get' are read-only -->
+            <tx:method name="get*" read-only="true"/>
+            <!-- other methods use the default transaction settings (see below) -->
+            <tx:method name="*"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!-- Register service as a transactional thingy-->
+    <aop:config>
+        <aop:pointcut id="transactionalServiceOperation" expression="execution(* demo.spring.dbs.TransactionalService.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="transactionalServiceOperation"/>
+    </aop:config>
+
+    <!-- Define the data source-->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost/appstore" />
+        <property name="username" value="appstoredev" />
+        <property name="password" value="appstoredev" />
+    </bean>
+
+    <!-- Define transaction manager: this is where you can pick between Spring JDBC, hibernate, JPA etc.  -->
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+</beans>
